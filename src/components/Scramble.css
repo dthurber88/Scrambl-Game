@@ -5,7 +5,6 @@
   font-family: "Gloria Hallelujah", cursive;
 }
 .scrambl-header-logo-subtext {
-  margin-top: -10px;
   margin-bottom: 30px;
   font-size: 22px;
   font-family: "Gloria Hallelujah", cursive;
@@ -59,9 +58,15 @@
   background: none;
 }
 
-@media (min-width: 768px) {
-  .reveal-button {
-    font-size: 24px;
-    min-width: 196px;
+@media (max-width: 768px) {
+  .scrambl-header-logo {
+    font-size: 42px;
+    font-family: "Gloria Hallelujah", cursive;
+  }
+  .scrambl-header-logo-subtext {
+    margin-top: -10px;
+    margin-bottom: 30px;
+    font-size: 18px;
+    font-family: "Gloria Hallelujah", cursive;
   }
 }

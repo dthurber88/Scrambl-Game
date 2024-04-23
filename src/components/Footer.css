@@ -1,7 +1,11 @@
 .footer {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  margin-right: 10px;
-  margin-bottom: 2;
+  position: relative;
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.footer img {
+  width: 175px;
+  margin-left: 10px;
 }

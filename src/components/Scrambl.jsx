@@ -9,6 +9,9 @@ const Scrambl = () => {
     <div className="home-container">
       <div className="scrambl-header-logo">S C R A M B L</div>
       <div className="scrambl-header-logo-subtext">A Game of Speed</div>
+      <div className="scrambl-header-logo-subtext">
+        7 Seconds to Unscramble a Word
+      </div>
       <div className="reveal">
         {!revealed && (
           <button className="reveal-button" onClick={() => setRevealed(true)}>
