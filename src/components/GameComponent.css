@@ -7,10 +7,8 @@
   height: 3rem;
   width: 3rem;
   margin: 5px;
-  border: 1px;
-  border-style: solid;
+  border: 2px solid;
   border-radius: 5px;
-  overflow: hidden;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -18,12 +16,13 @@
 }
 
 .guess {
-  display: inline-block;
   text-align: center;
-  height: 2rem;
-  width: 15rem;
+  height: 3rem;
+  width: 17rem;
   font-size: 25px;
   margin: 5px;
-  border: 1px solid #ccc;
-  border-radius: 14px;
+  border: 2px solid;
+  border-radius: 5px;
+  background: transparent;
+  color: white;
 }
