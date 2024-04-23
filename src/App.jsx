@@ -1,8 +1,8 @@
 import "./App.css";
-import Game from "./components/Game";
+import Scrambl from "./components/Scrambl";
 
 function App() {
-  return <Game />;
+  return <Scrambl />;
 }
 
 export default App;
