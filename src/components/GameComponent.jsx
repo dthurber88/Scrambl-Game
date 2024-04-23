@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./GameComponent.css";
 
 const GameComponent = () => {
-  const word = "player";
+  const word = "cranky";
   const wordArray = word.split("");
   const mappedWord = wordArray.map((char) => {
     return char.toUpperCase();
