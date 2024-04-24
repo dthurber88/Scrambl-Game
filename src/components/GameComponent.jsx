@@ -2,20 +2,25 @@ import React, { useState } from "react";
 import "./GameComponent.css";
 
 const GameComponent = () => {
-  const word = "cranky";
+  const word = "cherry";
   const wordArray = word.split("");
   const mappedWord = wordArray.map((char) => {
     return char.toUpperCase();
   });
 
   const shuffledWord = shuffle(mappedWord);
-  const [winState, setWinState] = useState();
+  const [guessSuccess, setGuessSuccess] = useState();
+  const [isPlaying, setIsPlaying] = useState(true);
 
   const validateInput = (e) => {
     e.preventDefault();
     console.log(e.target.value);
     if (e.target.value == word) {
-      setWinState(true);
+      setIsPlaying(false);
+      setGuessSuccess(true);
+    } else {
+      setIsPlaying(false);
+      setGuessSuccess(false);
     }
   };
 
@@ -30,11 +35,11 @@ const GameComponent = () => {
   return (
     <>
       <div className="game-container">
-        {!winState && (
+        {isPlaying && (
           <>
             <div className="guess-game">
               {shuffledWord.map((char, index) => (
-                <div key={index} className="letter">
+                <div key={index} className="jumbled-letter">
                   {char}
                 </div>
               ))}
@@ -50,10 +55,26 @@ const GameComponent = () => {
             </div>
           </>
         )}
-        {winState && (
+        {!isPlaying && guessSuccess && (
           <>
             <div>Nice Work!</div>
             <div>Come back tomorrow</div>
+            <div>Stats and Shit Here</div>
+          </>
+        )}
+        {!isPlaying && !guessSuccess && (
+          <>
+            <div>
+              So Close! Today's word was:
+              <div className="word-reveal-container">
+                {wordArray.map((char, index) => (
+                  <div key={index} className="word-reveal">
+                    {char.toUpperCase()}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>Try Again Tomorrow!</div>
             <div>Stats and Shit Here</div>
           </>
         )}

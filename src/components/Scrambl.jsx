@@ -15,7 +15,7 @@ const Scrambl = () => {
       <div className="reveal">
         {!revealed && (
           <button className="reveal-button" onClick={() => setRevealed(true)}>
-            <span className="text">SCRAMBL IT</span>
+            <span className="text">SCRAMBL IT!</span>
           </button>
         )}
         {revealed && <GameComponent />}
