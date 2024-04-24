@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./GameComponent.css";
 
 const GameComponent = () => {
@@ -8,9 +8,12 @@ const GameComponent = () => {
     return char.toUpperCase();
   });
 
-  const shuffledWord = shuffle(mappedWord);
   const [guessSuccess, setGuessSuccess] = useState();
   const [isPlaying, setIsPlaying] = useState(true);
+  const [timeLeft, setTimeLeft] = useState(7);
+  const timerRef = useRef();
+
+  const shuffledWord = useRef(shuffle(mappedWord));
 
   const validateInput = (e) => {
     e.preventDefault();
@@ -18,9 +21,7 @@ const GameComponent = () => {
     if (e.target.value == word) {
       setIsPlaying(false);
       setGuessSuccess(true);
-    } else {
-      setIsPlaying(false);
-      setGuessSuccess(false);
+      clearInterval(timerRef.current);
     }
   };
 
@@ -32,13 +33,33 @@ const GameComponent = () => {
     return array;
   }
 
+  const tick = () => {
+    console.log(timeLeft);
+
+    if (timeLeft > 0) {
+      setTimeLeft((timeLeft) => timeLeft - 1);
+    } else {
+      setGuessSuccess(false);
+      setIsPlaying(false);
+      clearInterval(timerRef.current);
+    }
+  };
+
+  useEffect(() => {
+    timerRef.current = setInterval(tick, 1000);
+
+    return () => {
+      clearInterval(timerRef.current);
+    };
+  }, [timeLeft]);
+
   return (
     <>
       <div className="game-container">
         {isPlaying && (
           <>
             <div className="guess-game">
-              {shuffledWord.map((char, index) => (
+              {shuffledWord.current.map((char, index) => (
                 <div key={index} className="jumbled-letter">
                   {char}
                 </div>
