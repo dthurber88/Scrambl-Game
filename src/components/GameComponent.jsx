@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./GameComponent.css";
 
 const GameComponent = () => {
-  const word = "cherry";
+  const word = "pepper";
   const wordArray = word.split("");
   const mappedWord = wordArray.map((char) => {
     return char.toUpperCase();
@@ -34,8 +34,6 @@ const GameComponent = () => {
   }
 
   const tick = () => {
-    console.log(timeLeft);
-
     if (timeLeft > 0) {
       setTimeLeft((timeLeft) => timeLeft - 1);
     } else {
@@ -56,6 +54,9 @@ const GameComponent = () => {
   return (
     <>
       <div className="game-container">
+        <div className="scrambl-header-logo-subtext">
+          {timeLeft} Seconds left Unscramble a Word
+        </div>
         {isPlaying && (
           <>
             <div className="guess-game">
