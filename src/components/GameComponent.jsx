@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import GameStats from "./GameStats";
 import "./GameComponent.css";
 
 const GameComponent = () => {
-  const word = "pepper";
+  const word = "cookie";
   const wordArray = word.split("");
   const mappedWord = wordArray.map((char) => {
     return char.toUpperCase();
@@ -34,9 +35,10 @@ const GameComponent = () => {
   }
 
   const tick = () => {
-    if (timeLeft > 0) {
+    if (timeLeft > 1) {
       setTimeLeft((timeLeft) => timeLeft - 1);
     } else {
+      setTimeLeft(0);
       setGuessSuccess(false);
       setIsPlaying(false);
       clearInterval(timerRef.current);
@@ -79,9 +81,7 @@ const GameComponent = () => {
         )}
         {!isPlaying && guessSuccess && (
           <>
-            <div>Nice Work!</div>
-            <div>Come back tomorrow</div>
-            <div>Stats and Shit Here</div>
+            <GameStats timeLeft={timeLeft} />
           </>
         )}
         {!isPlaying && !guessSuccess && (
@@ -96,8 +96,7 @@ const GameComponent = () => {
                 ))}
               </div>
             </div>
-            <div>Try Again Tomorrow!</div>
-            <div>Stats and Shit Here</div>
+            <GameStats timeLeft={timeLeft} />
           </>
         )}
       </div>
