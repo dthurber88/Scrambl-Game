@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import GameStats from "./GameStats";
+import { words } from "./WordDictionary";
 import "./GameComponent.css";
 
 const GameComponent = () => {
@@ -16,6 +17,8 @@ const GameComponent = () => {
 
   const shuffledWord = useRef(shuffle(mappedWord));
 
+  console.log(words[1]);
+
   const validateInput = (e) => {
     e.preventDefault();
     console.log(e.target.value);
@@ -23,6 +26,7 @@ const GameComponent = () => {
       setIsPlaying(false);
       setGuessSuccess(true);
       clearInterval(timerRef.current);
+      localStorage.setItem("lastPlayTimestamp", Date.now());
     }
   };
 
@@ -42,6 +46,7 @@ const GameComponent = () => {
       setGuessSuccess(false);
       setIsPlaying(false);
       clearInterval(timerRef.current);
+      localStorage.setItem("lastPlayTimestamp", Date.now());
     }
   };
 

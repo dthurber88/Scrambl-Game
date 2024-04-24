@@ -1,0 +1,4 @@
+.end-game {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./GameStats.css";
 
 const GameStats = (props) => {
   const [time, setTime] = useState();
@@ -92,7 +93,12 @@ const GameStats = (props) => {
     }
   }, [score]);
 
-  return <div>{time}</div>;
+  return (
+    <div className="end-game">
+      <div>{time}</div>
+      <div>Stats and Shit Here</div>
+    </div>
+  );
 };
 
 export default GameStats;
