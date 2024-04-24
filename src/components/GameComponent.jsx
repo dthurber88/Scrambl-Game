@@ -57,7 +57,7 @@ const GameComponent = () => {
     <>
       <div className="game-container">
         <div className="scrambl-header-logo-subtext">
-          {timeLeft} Seconds left Unscramble a Word
+          {timeLeft} Seconds left to Unscramble the Word
         </div>
         {isPlaying && (
           <>
