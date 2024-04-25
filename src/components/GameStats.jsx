@@ -96,7 +96,7 @@ const GameStats = (props) => {
   return (
     <div className="end-game">
       <div>{time}</div>
-      <div>Stats and Shit Here</div>
+      <div>Stats Coming Soon</div>
     </div>
   );
 };
