@@ -3,8 +3,8 @@ import GameStats from "./GameStats";
 import { words } from "./WordDictionary";
 import "./GameComponent.css";
 
-const GameComponent = () => {
-  const word = "cookie";
+const GameComponent = (props) => {
+  const word = words[props.daysPassed];
   const wordArray = word.split("");
   const mappedWord = wordArray.map((char) => {
     return char.toUpperCase();
@@ -13,11 +13,10 @@ const GameComponent = () => {
   const [guessSuccess, setGuessSuccess] = useState();
   const [isPlaying, setIsPlaying] = useState(true);
   const [timeLeft, setTimeLeft] = useState(7);
+
   const timerRef = useRef();
 
   const shuffledWord = useRef(shuffle(mappedWord));
-
-  console.log(words[1]);
 
   const validateInput = (e) => {
     e.preventDefault();

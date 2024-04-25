@@ -8,6 +8,23 @@ const Scrambl = () => {
   const [canPlay, setCanPlay] = useState();
   const [seeStats, setSeeStats] = useState();
 
+  function countDaysSince(startDate) {
+    const startTimestamp = new Date(startDate).getTime();
+    const currentTimestamp = new Date().getTime();
+
+    const difference = currentTimestamp - startTimestamp;
+
+    const millisecondsInDay = 1000 * 60 * 60 * 24;
+    const daysDifference = Math.floor(difference / millisecondsInDay);
+
+    return daysDifference;
+  }
+
+  const startDate = new Date("2024-04-24"); // Start date
+  const daysPassed = countDaysSince(startDate); // Days Passed
+
+  console.log(daysPassed);
+
   useEffect(() => {
     const lastPlayTimestamp = localStorage.getItem("lastPlayTimestamp");
 
@@ -23,12 +40,7 @@ const Scrambl = () => {
     function sameDay(day1, day2) {
       const date1 = new Date(day1);
       const date2 = new Date(day2);
-      console.log(
-        date1.getDate(),
-        date1.getMonth(),
-        date2.getDate(),
-        date2.getMonth()
-      );
+
       return (
         date1.getFullYear() === date2.getFullYear() &&
         date1.getMonth() === date2.getMonth() &&
@@ -52,7 +64,7 @@ const Scrambl = () => {
             <span className="text">SCRAMBL IT!</span>
           </button>
         )}
-        {revealed && <GameComponent />}
+        {revealed && <GameComponent daysPassed={daysPassed} />}
         {!revealed && !canPlay && !seeStats && (
           <>
             <div>You Already Played Today!</div>

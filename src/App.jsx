@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import "./App.css";
 import Scrambl from "./components/Scrambl";
 

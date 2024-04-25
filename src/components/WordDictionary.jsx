@@ -1,4 +1,5 @@
 export const words = [
+  "pholdr",
   "course",
   "system",
   "school",
