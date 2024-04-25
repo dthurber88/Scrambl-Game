@@ -2,7 +2,7 @@
   "homepage": "https://dthurber88.github.io/Scrambl-Game/",
   "name": "scrambl-game",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
