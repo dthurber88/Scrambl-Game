@@ -13,7 +13,7 @@ export const words = [
   "mother",
   "period",
   "father",
-  "centre",
+  "center",
   "effect",
   "action",
   "moment",

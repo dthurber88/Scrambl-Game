@@ -96,7 +96,30 @@ const GameStats = (props) => {
   return (
     <div className="end-game">
       <div>{time}</div>
-      <div>Stats Coming Soon</div>
+      <div>
+        You solved {localStorage.getItem("sevenSeconds")} words in Six Seconds.
+      </div>
+      <div>
+        You solved {localStorage.getItem("sixSeconds")} words in Six Seconds.
+      </div>
+      <div>
+        You solved {localStorage.getItem("fiveSeconds")} words in Six Seconds.
+      </div>
+      <div>
+        You solved {localStorage.getItem("fourSeconds")} words in Six Seconds.
+      </div>
+      <div>
+        You solved {localStorage.getItem("threeSeconds")} words in Six Seconds.
+      </div>
+      <div>
+        You solved {localStorage.getItem("twoSeconds")} words in Six Seconds.
+      </div>
+      <div>
+        You solved {localStorage.getItem("oneSeconds")} words in Six Seconds.
+      </div>
+      <div>
+        You failed to solve {localStorage.getItem("zeroSeconds")} words.
+      </div>
     </div>
   );
 };
