@@ -89,25 +89,27 @@ const GameStats = (props) => {
     <div className="end-game">
       <div>{time}</div>
       <div>
-        You solved {localStorage.getItem("sevenSeconds")} words in Six Seconds.
+        You solved {localStorage.getItem("sevenSeconds")} words in Seven
+        Seconds.
       </div>
       <div>
         You solved {localStorage.getItem("sixSeconds")} words in Six Seconds.
       </div>
       <div>
-        You solved {localStorage.getItem("fiveSeconds")} words in Six Seconds.
+        You solved {localStorage.getItem("fiveSeconds")} words in Five Seconds.
       </div>
       <div>
-        You solved {localStorage.getItem("fourSeconds")} words in Six Seconds.
+        You solved {localStorage.getItem("fourSeconds")} words in Four Seconds.
       </div>
       <div>
-        You solved {localStorage.getItem("threeSeconds")} words in Six Seconds.
+        You solved {localStorage.getItem("threeSeconds")} words in Three
+        Seconds.
       </div>
       <div>
-        You solved {localStorage.getItem("twoSeconds")} words in Six Seconds.
+        You solved {localStorage.getItem("twoSeconds")} words in Two Seconds.
       </div>
       <div>
-        You solved {localStorage.getItem("oneSeconds")} words in Six Seconds.
+        You solved {localStorage.getItem("oneSeconds")} words in One Second.
       </div>
       <div>
         You failed to solve {localStorage.getItem("zeroSeconds")} words.
