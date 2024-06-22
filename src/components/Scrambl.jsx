@@ -23,8 +23,6 @@ const Scrambl = () => {
   const startDate = new Date("2024-06-21"); // Start date
   const daysPassed = countDaysSince(startDate); // Days Passed
 
-  console.log(daysPassed);
-
   useEffect(() => {
     const lastPlayTimestamp = localStorage.getItem("lastPlayTimestamp");
 
