@@ -20,8 +20,8 @@ const GameComponent = (props) => {
 
   const validateInput = (e) => {
     e.preventDefault();
-    console.log(e.target.value);
-    if (e.target.value == word) {
+
+    if (e.target.value.toUpperCase() == word.toUpperCase()) {
       setIsPlaying(false);
       setGuessSuccess(true);
       clearInterval(timerRef.current);
