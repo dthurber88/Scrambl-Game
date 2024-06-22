@@ -20,7 +20,7 @@ const Scrambl = () => {
     return daysDifference;
   }
 
-  const startDate = new Date("2024-04-24"); // Start date
+  const startDate = new Date("2024-06-21"); // Start date
   const daysPassed = countDaysSince(startDate); // Days Passed
 
   console.log(daysPassed);
