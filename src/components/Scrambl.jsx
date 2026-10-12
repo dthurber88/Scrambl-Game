@@ -1,51 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import GameComponent from "./GameComponent";
 import "./Scramble.css";
 import GameStats from "./GameStats";
+import { getDayNumber, hasPlayedToday, loadStats } from "../stats";
 
 const Scrambl = () => {
-  const [revealed, setRevealed] = useState();
-  const [canPlay, setCanPlay] = useState();
-  const [seeStats, setSeeStats] = useState();
+  const [day] = useState(getDayNumber);
+  const [stats, setStats] = useState(loadStats);
+  const [revealed, setRevealed] = useState(false);
+  const [seeStats, setSeeStats] = useState(false);
 
-  function countDaysSince(startDate) {
-    const startTimestamp = new Date(startDate).getTime();
-    const currentTimestamp = new Date().getTime();
-
-    const difference = currentTimestamp - startTimestamp;
-
-    const millisecondsInDay = 1000 * 60 * 60 * 24;
-    const daysDifference = Math.floor(difference / millisecondsInDay);
-
-    return daysDifference;
-  }
-
-  const startDate = new Date("2024-06-21"); // Start date
-  const daysPassed = countDaysSince(startDate); // Days Passed
-
-  useEffect(() => {
-    const lastPlayTimestamp = localStorage.getItem("lastPlayTimestamp");
-
-    if (
-      !lastPlayTimestamp ||
-      !sameDay(parseInt(lastPlayTimestamp, 10), Date.now())
-    ) {
-      setCanPlay(true);
-    } else {
-      setCanPlay(false);
-    }
-
-    function sameDay(day1, day2) {
-      const date1 = new Date(day1);
-      const date2 = new Date(day2);
-
-      return (
-        date1.getFullYear() === date2.getFullYear() &&
-        date1.getMonth() === date2.getMonth() &&
-        date1.getDate() === date2.getDate()
-      );
-    }
-  }, [canPlay]);
+  const canPlay = !hasPlayedToday(stats, day);
 
   return (
     <div className="home-container">
@@ -62,7 +27,7 @@ const Scrambl = () => {
             <span className="text">SCRAMBL IT!</span>
           </button>
         )}
-        {revealed && <GameComponent daysPassed={daysPassed} />}
+        {revealed && <GameComponent day={day} onFinish={setStats} />}
         {!revealed && !canPlay && !seeStats && (
           <>
             <div>You Already Played Today!</div>
@@ -77,11 +42,9 @@ const Scrambl = () => {
           </>
         )}
         {!revealed && !canPlay && seeStats && (
-          <>
-            <div>
-              <GameStats />
-            </div>
-          </>
+          <div>
+            <GameStats stats={stats} day={day} />
+          </div>
         )}
       </div>
     </div>

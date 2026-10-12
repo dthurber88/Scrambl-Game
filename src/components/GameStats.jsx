@@ -1,119 +1,100 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import { MAX_SECONDS, shareText, winPercentage } from "../stats";
 import "./GameStats.css";
 
-const GameStats = (props) => {
-  const [time, setTime] = useState();
-  const [score, setScore] = useState();
+const MESSAGES = {
+  7: "Holy Cow! You solved it with 7 seconds left!",
+  6: "Impressive! You solved it with 6 seconds left!",
+  5: "Great! You solved it with 5 seconds left!",
+  4: "Good One! You solved it with 4 seconds left!",
+  3: "Not bad! You solved it with 3 seconds left!",
+  2: "Phew, You solved it with 2 seconds left!",
+  1: "That was a close one! You solved it with 1 second left!",
+  0: "Darn! This was a tough one. Try again tomorrow!",
+};
 
-  useEffect(() => {
-    switch (props.timeLeft) {
-      case 7:
-        setTime("Holy Cow! You solved it with 7 seconds left!");
-        setScore(7);
-        break;
-      case 6:
-        setTime("Impressive! You solved it with 6 seconds left!");
-        setScore(6);
-        break;
-      case 5:
-        setTime("Great! You solved it with 5 seconds left!");
-        setScore(5);
-        break;
-      case 4:
-        setTime("Good One! You solved it with 4 seconds left!");
-        setScore(4);
-        break;
-      case 3:
-        setTime("Not bad! You solved it with 3 seconds left!");
-        setScore(3);
-        break;
-      case 2:
-        setTime("Phew, You solved it with 2 seconds left!");
-        setScore(2);
-        break;
-      case 1:
-        setTime("That was a close one! You solved it with 1 second left!");
-        setScore(1);
-        break;
-      case 0:
-        setTime("Darn! This was a tough one. Try again tomorrow!");
-        setScore(0);
-        break;
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const area = document.createElement("textarea");
+    area.value = text;
+    document.body.appendChild(area);
+    area.select();
+    try {
+      return document.execCommand("copy");
+    } catch {
+      return false;
+    } finally {
+      document.body.removeChild(area);
     }
-  }, []);
+  }
+}
 
-  useEffect(() => {
-    if (score == 7) {
-      let increaseScore = parseInt(localStorage.getItem("sevenSeconds"));
-      increaseScore += 1;
-      localStorage.setItem("sevenSeconds", increaseScore.toString());
-    }
-    if (score == 6) {
-      let increaseScore = parseInt(localStorage.getItem("sixSeconds"));
-      increaseScore += 1;
-      localStorage.setItem("sixSeconds", increaseScore.toString());
-    }
-    if (score == 5) {
-      let increaseScore = parseInt(localStorage.getItem("fiveSeconds"));
-      increaseScore += 1;
-      localStorage.setItem("fiveSeconds", increaseScore.toString());
-    }
-    if (score == 4) {
-      let increaseScore = parseInt(localStorage.getItem("fourSeconds"));
-      increaseScore += 1;
-      localStorage.setItem("fourSeconds", increaseScore.toString());
-    }
-    if (score == 3) {
-      let increaseScore = parseInt(localStorage.getItem("threeSeconds"));
-      increaseScore += 1;
-      localStorage.setItem("threeSeconds", increaseScore.toString());
-    }
-    if (score == 2) {
-      let increaseScore = parseInt(localStorage.getItem("twoSeconds"));
-      increaseScore += 1;
-      localStorage.setItem("twoSeconds", increaseScore.toString());
-    }
-    if (score == 1) {
-      let increaseScore = parseInt(localStorage.getItem("oneSeconds"));
-      increaseScore += 1;
-      localStorage.setItem("oneSeconds", increaseScore.toString());
-    }
-    if (score == 0) {
-      let increaseScore = parseInt(localStorage.getItem("zeroSeconds"));
-      increaseScore += 1;
-      localStorage.setItem("zeroSeconds", increaseScore.toString());
-    }
-  }, [score]);
+const GameStats = ({ stats, day }) => {
+  const [shareState, setShareState] = useState("idle");
+  const seconds = Array.from({ length: MAX_SECONDS }, (_, i) => i + 1);
+  const maxWins = Math.max(1, ...seconds.map((s) => stats.winsBySecondsLeft[s]));
+  const played = stats.lastPlayedDay === day;
+
+  const share = async () => {
+    const ok = await copyText(shareText(day, stats.lastSecondsLeft));
+    setShareState(ok ? "copied" : "failed");
+  };
 
   return (
     <div className="end-game">
-      <div>{time}</div>
-      <div>
-        You solved {localStorage.getItem("sevenSeconds")} words in Seven
-        Seconds.
+      {played && <div>{MESSAGES[stats.lastSecondsLeft]}</div>}
+      <div className="stats-summary">
+        <div className="stat">
+          <span className="stat-value">{stats.gamesPlayed}</span>
+          <span className="stat-label">Played</span>
+        </div>
+        <div className="stat">
+          <span className="stat-value">{winPercentage(stats)}%</span>
+          <span className="stat-label">Win %</span>
+        </div>
+        <div className="stat">
+          <span className="stat-value">{stats.currentStreak}</span>
+          <span className="stat-label">Streak</span>
+        </div>
+        <div className="stat">
+          <span className="stat-value">{stats.bestStreak}</span>
+          <span className="stat-label">Best</span>
+        </div>
       </div>
-      <div>
-        You solved {localStorage.getItem("sixSeconds")} words in Six Seconds.
+      <div className="stats-chart-title">Seconds left on each win</div>
+      <div className="stats-chart" role="list">
+        {seconds.map((s) => {
+          const count = stats.winsBySecondsLeft[s];
+          return (
+            <div className="stats-chart-row" role="listitem" key={s}>
+              <span className="stats-chart-label">{s}s</span>
+              <div className="stats-chart-track">
+                <div
+                  className="stats-chart-bar"
+                  style={{ width: `${(count / maxWins) * 100}%` }}
+                />
+              </div>
+              <span className="stats-chart-count">{count}</span>
+            </div>
+          );
+        })}
       </div>
-      <div>
-        You solved {localStorage.getItem("fiveSeconds")} words in Five Seconds.
-      </div>
-      <div>
-        You solved {localStorage.getItem("fourSeconds")} words in Four Seconds.
-      </div>
-      <div>
-        You solved {localStorage.getItem("threeSeconds")} words in Three
-        Seconds.
-      </div>
-      <div>
-        You solved {localStorage.getItem("twoSeconds")} words in Two Seconds.
-      </div>
-      <div>
-        You solved {localStorage.getItem("oneSeconds")} words in One Second.
-      </div>
-      <div>
-        You failed to solve {localStorage.getItem("zeroSeconds")} words.
-      </div>
+      {played && (
+        <div>
+          <button className="stats-button" onClick={share}>
+            <span className="text">
+              {shareState === "copied"
+                ? "Copied!"
+                : shareState === "failed"
+                ? "Copy failed"
+                : "Share"}
+            </span>
+          </button>
+        </div>
+      )}
     </div>
   );
 };
