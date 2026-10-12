@@ -1,61 +1,60 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import GameStats from "./GameStats";
-import { words } from "./WordDictionary";
+import { words } from "../data/words";
+import { recordResult } from "../stats";
 import "./GameComponent.css";
 
-const GameComponent = (props) => {
-  const word = words[props.daysPassed];
-  const wordArray = word.split("");
-  const mappedWord = wordArray.map((char) => {
-    return char.toUpperCase();
-  });
+const START_SECONDS = 7;
 
-  const [guessSuccess, setGuessSuccess] = useState();
+function shuffle(letters) {
+  const array = [...letters];
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+const GameComponent = ({ day, onFinish }) => {
+  const word = words[day % words.length];
+  const wordArray = word.toUpperCase().split("");
+
+  const [guessSuccess, setGuessSuccess] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [timeLeft, setTimeLeft] = useState(7);
+  const [timeLeft, setTimeLeft] = useState(START_SECONDS);
+  const [stats, setStats] = useState(null);
 
-  const timerRef = useRef();
+  const shuffledWord = useRef(shuffle(wordArray));
 
-  const shuffledWord = useRef(shuffle(mappedWord));
-
-  const validateInput = (e) => {
-    e.preventDefault();
-
-    if (e.target.value.toUpperCase() == word.toUpperCase()) {
-      setIsPlaying(false);
-      setGuessSuccess(true);
-      clearInterval(timerRef.current);
-      localStorage.setItem("lastPlayTimestamp", Date.now());
-    }
+  const finish = (secondsLeft) => {
+    const next = recordResult(day, secondsLeft);
+    setIsPlaying(false);
+    setGuessSuccess(secondsLeft > 0);
+    setStats(next);
+    onFinish(next);
   };
 
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
-
-  const tick = () => {
-    if (timeLeft > 1) {
-      setTimeLeft((timeLeft) => timeLeft - 1);
-    } else {
-      setTimeLeft(0);
-      setGuessSuccess(false);
-      setIsPlaying(false);
-      clearInterval(timerRef.current);
-      localStorage.setItem("lastPlayTimestamp", Date.now());
+  const validateInput = (e) => {
+    if (e.target.value.toUpperCase() === word.toUpperCase()) {
+      finish(timeLeft);
     }
   };
 
   useEffect(() => {
-    timerRef.current = setInterval(tick, 1000);
+    if (!isPlaying) return undefined;
+    const timer = setInterval(() => {
+      setTimeLeft((t) => Math.max(t - 1, 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [isPlaying]);
 
-    return () => {
-      clearInterval(timerRef.current);
-    };
-  }, [timeLeft]);
+  useEffect(() => {
+    if (isPlaying && timeLeft === 0) {
+      finish(0);
+    }
+    // finish only closes over props and setters that are stable for this game.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPlaying, timeLeft]);
 
   return (
     <>
@@ -74,7 +73,7 @@ const GameComponent = (props) => {
             </div>
             <div>
               <input
-                maxLength={shuffledWord.length}
+                maxLength={word.length}
                 className="guess"
                 placeholder="Guess Quick!"
                 onChange={validateInput}
@@ -83,26 +82,19 @@ const GameComponent = (props) => {
             </div>
           </>
         )}
-        {!isPlaying && guessSuccess && (
-          <>
-            <GameStats timeLeft={timeLeft} />
-          </>
-        )}
         {!isPlaying && !guessSuccess && (
-          <>
-            <div>
-              So Close! Today's word was:
-              <div className="word-reveal-container">
-                {wordArray.map((char, index) => (
-                  <div key={index} className="word-reveal">
-                    {char.toUpperCase()}
-                  </div>
-                ))}
-              </div>
+          <div>
+            So Close! Today&apos;s word was:
+            <div className="word-reveal-container">
+              {wordArray.map((char, index) => (
+                <div key={index} className="word-reveal">
+                  {char}
+                </div>
+              ))}
             </div>
-            <GameStats timeLeft={timeLeft} />
-          </>
+          </div>
         )}
+        {!isPlaying && stats && <GameStats stats={stats} day={day} />}
       </div>
     </>
   );
